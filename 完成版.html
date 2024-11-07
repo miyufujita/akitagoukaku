@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&Aサイト</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+         <!-- SupabaseのCDNを読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.js"></script>
+    <script>
+        // import { createClient } from '@supabase/supabase-js';
+
+
+          // Supabaseの初期化
+        const supabaseUrl = 'https://vsqqkpymevezyxfyxris.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzcXFrcHltZXZlenl4Znl4cmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcxNzYwNjQsImV4cCI6MjA0Mjc1MjA2NH0.BXu8Na4VLvrcqqBebA8F8e8uogjyi2E_SLDsza1C884';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        console.log(supabaseClient);
+    </script>
+   
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {
+    // 質問フォームの送信イベント
+    $('#question-form').on('submit', async function(e) {
+        e.preventDefault();
+
+        // フォームのデータを取得
+        const title = $('#question-title').val();
+        const detail = $('#question-detail').val();
+
+        // Supabaseに質問を追加
+        const { data, error } = await supabaseClient
+            .from('questions')
+            .insert([{ title: title, detail: detail }]);
+
+        if (error) {
+            alert('質問の投稿に失敗しました');
+            console.error(error);
+        } else {
+            alert('質問が投稿されました');
+            // フォームをリセット
+            $('#question-title').val('');
+            $('#question-detail').val('');
+            loadQuestions(); // 質問一覧を再読み込み
+        }
+    });
+})
+
+
+        // 質問の読み込み２
+        async function loadQuestions() {
+            const response = await supabaseClient.from('questions').select('*');
+            // console.log(response)
+            const questions = response.data
+            console.log("-----questions------")
+            console.log(questions)
+
+      // 質問を表示
+            const container = $('#questions-container');
+        // console.log("questions", questions)
+        container.empty();
+        questions.forEach(question => {
+            container.append(`
+                <div>
+                    <h3>${question.title}</h3>
+                    <p>${question.detail}</p>
+                    <button class="answer-btn" data-id="${question.id}">回答を見る</button>
+                    <div class="answers" id="answers-${question.id}"></div>
+                </div>
+            `);
+        });
+
+        $('.answer-btn').on('click', function() {
+            const questionId = $(this).data('id');
+            loadAnswers(questionId);
+        });
+        }
+
+
+// エラーハンドリング
+async function fetchQuestions() {
+    try {
+        const { data, error } = await supabase
+            .from('questions')
+            .select('*');
+        
+        if (error) {
+            console.error('Error fetching questions:', error);
+            return;
+        }
+        
+        console.log('Questions:', data);
+    } catch (error) {
+        console.error('Unexpected error:', error);
+    }
+}
+
+
+
+
+    console.log("81行目")
+
+
+    // 初回ロード時に質問を取得
+    loadQuestions();
+
+    console.log("小kまで１")
+    
+
+    // 回答を読み込む関数
+async function loadAnswers(questionId) {
+    console.log("loadAnswers", 0)
+    const { data: answers, error } = await supabaseClient
+        .from('answers')
+        .select('*')
+        .eq('question_id', questionId)
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+
+    console.log("loadAnswers", 1)
+    // 回答を表示
+    const answersContainer = $(`#answers-${questionId}`);
+    console.log("loadAnswers", 2)
+    answersContainer.empty();
+    answers.forEach(answer => {
+        answersContainer.append(`<p>${answer.content}</p>`);
+    });
+    // console.log("loadAnswers", 3)
+
+    // 回答フォームを追加
+    answersContainer.append(`
+        <form class="answer-form">
+            <textarea class="answer-content" placeholder="回答内容"></textarea>
+            <button type="submit">回答を投稿</button>
+        </form>
+    `);
+    // console.log("loadAnswers", 4)
+
+    // 回答フォームの送信イベント
+    answersContainer.find('.answer-form').on('submit', async function(e) {
+        e.preventDefault();
+        const content = $(this).find('.answer-content').val();
+
+        const { data, error } = await supabaseClient
+            .from('answers')
+            .insert([{ question_id: questionId, content: content }]);
+
+        if (error) {
+            console.error(error);
+        } else {
+            loadAnswers(questionId); // 回答一覧を再読み込み
+        }
+    });
+    // console.log("loadAnswers", 5)
+}
+
+
+    </script>
+
+</head>
+<body>
+    <h1>秋大！知恵袋</h1>
+    <div id="questions-container"></div>
+
+    <h2>質問を投稿する</h2>
+    <form id="question-form">
+        <input type="text" id="question-title" placeholder="質問タイトル" required><br>
+        <textarea id="question-detail" placeholder="質問内容" required></textarea><br>
+        <button type="submit">質問を投稿</button>
+    </form>
+
+    <script>
+      
+    </script>
+</body>
+</html>
+
+
