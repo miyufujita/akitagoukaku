@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&Aサイト</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header>
+        <div> <h1>秋医！知恵袋</h1>
+        
+        
+       
+
+        <!-- 検索機能 -->
+    <input type="text" id="search-input" placeholder="質問を検索">
+    <button id="search-button">検索</button>
+        <button id="login">ログイン</button>
+        </div>
+<div>
+        <h5>あなたの学生生活を、もっとスマートに。</h5>
+        
+        </div>
+        <nav>
+            <ul>
+                <li>カテゴリ1</li>
+                <li>カテゴリ2</li>
+                <li>カテゴリ3</li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main>
+        <!-- サイドバー -->
+        <aside>
+            <section class="popular-questions">
+                <h3>人気の質問</h3>
+                <ul id="popular-questions-list">
+                    <li>質問1</li>
+                    <li>質問2</li>
+                    <li>質問3</li>
+                </ul>
+            </section>
+
+            <section class="notifications">
+                <h3>通知</h3>
+                <ul id="notifications-list">
+                    <li>新しい回答が追加されました</li>
+                    <li>評価されました</li>
+                </ul>
+            </section>
+
+            <section class="bookmarked-questions">
+                <h3>ブックマークした質問</h3>
+                <ul id="bookmarked-list">
+                    <li>質問A</li>
+                    <li>質問B</li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- 質問リスト -->
+        <section class="question-list">
+            <div class="filters">
+                <label><input type="radio" name="filter" value="newest"> 最新</label>
+                <label><input type="radio" name="filter" value="popular"> 人気順</label>
+                <label><input type="radio" name="filter" value="unanswered"> 未回答</label>
+            </div>
+
+            <div class="question">
+                <h3>質問タイトル</h3>
+                 <!-- 質問リスト -->
+    <ul id="question-list"></ul>
+
+    <!-- 質問詳細と回答投稿フォーム -->
+    <div id="question-detail" style="display: none;">
+        <h2 id="question-title-detail"></h2>
+        <p id="question-detail-detail"></p>
+        <button id="like-button">👍 いいね (<span id="like-count">0</span>)</button>
+        
+        <h3>回答一覧</h3>
+        <ul id="answer-list"></ul>
+
+        <h3>回答を投稿する</h3>
+        <form id="answer-form">
+            <textarea id="answer-content" placeholder="回答を入力"></textarea><br>
+            <button type="submit">回答を投稿</button>
+        </form>
+    </div>
+                <p>質問の内容プレビュー...</p>
+                <div class="tags">
+                    <span class="tag">数学</span>
+                    <span class="tag">物理</span>
+                </div>
+                <button class="bookmark-button">📑 ブックマーク</button>
+                <button class="edit-history-button">編集履歴</button>
+                <div class="edit-history" style="display:none;">
+                    <p>2024-10-11: 編集履歴サンプル</p>
+                </div>
+            </div>
+
+            <div class="answer">
+                <p>回答の内容...</p>
+                <div class="rating">
+                    <button class="upvote">👍 役に立った</button>
+                    <button class="downvote">👎 役に立たなかった</button>
+                </div>
+                <button class="best-answer-button">ベストアンサーに選ぶ</button>
+                <div class="best-answer-badge" style="display:none;">ベストアンサー</div>
+            </div>
+
+            <div class="poll">
+                <h3>アンケート: この質問に最適な回答は？</h3>
+                <ul>
+                    <li><label><input type="radio" name="poll" value="option1"> 選択肢1</label></li>
+                    <li><label><input type="radio" name="poll" value="option2"> 選択肢2</label></li>
+                </ul>
+                <button class="vote-button">投票</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <p>サイトポリシー</p>
+        <p>利用規約</p>
+        <p>お問い合わせ</p>
+    </footer>
+
+    <script>
+        const supabaseUrl = 'https://vsqqkpymevezyxfyxris.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzcXFrcHltZXZlenl4Znl4cmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcxNzYwNjQsImV4cCI6MjA0Mjc1MjA2NH0.BXu8Na4VLvrcqqBebA8F8e8uogjyi2E_SLDsza1C884';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        $(document).ready(function () {
+              // 質問リストを取得して表示
+            fetchQuestions();
+
+            // 質問リストの取得と表示
+            async function fetchQuestions(query = '') {
+                let { data: questions, error } = await supabaseClient
+                    .from('questions')
+                    .select('*')
+                    .like('title', `%${query}%`);
+
+                if (error) {
+                    console.error("質問の取得エラー:", error);
+                    return;
+                }
+                $('#question-list').empty();
+                questions.forEach(question => {
+                    $('#question-list').append(`
+                        <li>
+                            <a href="#" class="question-title" data-id="${question.id}">${question.title}</a>
+                            <span>👍 ${question.likes || 0}</span>
+                        </li>
+                    `);
+                });
+            }
+
+            // 検索ボタンの処理
+            $('#search-button').on('click', function() {
+                const query = $('#search-input').val();
+                fetchQuestions(query);
+            });
+
+            // 新しい質問の投稿処理
+            $('#question-form').on('submit', async function(e) {
+
+                e.preventDefault();
+                const title = $('#question-title').val();
+                const detail = $('#question-detail').val();
+                const { data, error } = await supabaseClient.from('questions').insert([{ title, detail, likes: 0 }]);
+                if (error) {
+                    console.error("質問の投稿エラー:", error);
+                    return;
+                }
+                $('#question-title').val('');
+                $('#question-detail').val('');
+                fetchQuestions();
+            });
+
+            // 質問詳細を表示
+            $('#question-list').on('click', '.question-title', async function(e) {
+
+                // 他のとこから入れてきた
+        //          const response = await supabaseClient.from('questions').select('*');
+        //     // console.log(response)
+        //     const questions = response.data
+        //     console.log("-----questions------")
+        //     console.log(questions)
+
+
+        //          const container = $('#questions-container');
+        // // console.log("questions", questions)
+        // container.empty();
+        // questions.forEach(question => {
+        //     container.append(`
+        //         <div>
+        //             <h3>${question.title}</h3>
+        //             <p>${question.detail}</p>
+        //             <button class="answer-btn" data-id="${question.id}">回答を見る</button>
+        //             <div class="answers" id="answers-${question.id}"></div>
+        //         </div>
+        //     `);
+        // });
+
+                e.preventDefault();
+                const questionId = $(this).data('id');
+                const { data: question, error } = await supabaseClient
+                    .from('questions')　 // テーブル名
+                    .select('*')　　 // 必要な列を選択
+                    .eq('id', questionId)　    // 条件: idが一致するもの
+                    .single();　 // 単一の行を取得
+
+                if (error) {
+                    console.error("質問詳細の取得エラー:", error);
+                    return;
+                }
+                $('#question-title-detail').text(question.title);
+                 $('#question-detail-detail').text(question.detail);
+    
+                $('#like-count').text(question.likes || 0);
+                $('#question-detail').data('id', question.id).show();
+                fetchAnswers(questionId);
+            });
+
+                        // 回答リストの取得と表示
+            async function fetchAnswers(questionId) {
+                const { data: answers, error } = await supabaseClient
+                    .from('answers')
+                    .select('*')
+                    .eq('question_id', questionId);
+
+                if (error) {
+                    console.error("回答の取得エラー:", error);
+                    return;
+                }
+                $('#answer-list').empty();
+                answers.forEach(answer => {
+                    $('#answer-list').append(`<li>${answer.content}</li>`);
+                });
+                  $('#like-count').text(answers.likes || 0);
+            }
+
+            // 回答の投稿処理
+            $('#answer-form').on('submit', async function(e) {
+                e.preventDefault();
+                const answerContent = $('#answer-content').val();
+                const questionId = $('#question-detail').data('id');
+                const { data, error } = await supabaseClient
+                    .from('answers')
+                    .insert([{ content: answerContent, question_id: questionId }]);
+
+                if (error) {
+                    console.error("回答の投稿エラー:", error);
+                    return;
+                }
+                $('#answer-content').val('');
+                fetchAnswers(questionId);
+            });
+
+            // いいね機能の処理
+            $('#like-button').on('click', async function() {
+                const questionId = $('#question-detail').data('id');
+                const { data: question, error } = await supabaseClient
+                    .from('questions')
+                    .select('likes')
+                    .eq('id', questionId)
+                    .single();
+
+                if (error) {
+                    console.error("いいねの取得エラー:", error);
+                    return;
+                }
+                const newLikes = (question.likes || 0) + 1;
+
+                const { error: updateError } = await supabaseClient
+                    .from('questions')
+                    .update({ likes: newLikes })
+                    .eq('id', questionId);
+
+                if (updateError) {
+                    console.error("いいねの更新エラー:", updateError);
+                    return;
+                }
+                $('#like-count').text(newLikes);
+                fetchQuestions(); // リストを更新していいね数を反映
+            });
+
+
+
+            // 質問のブックマーク機能
+            $('.bookmark-button').on('click', function () {
+                $(this).text('📑 ブックマーク済み');
+                // Supabaseへブックマークデータを送信する処理を追加
+            });
+
+            // 編集履歴の表示
+            $('.edit-history-button').on('click', function () {
+                $(this).next('.edit-history').toggle();
+            });
+
+            // 役に立った/立たなかったボタン
+            $('.upvote, .downvote').on('click', function () {
+                // 評価データをSupabaseへ送信する処理を追加
+            });
+
+            // ベストアンサー選択機能
+            $('.best-answer-button').on('click', function () {
+                $(this).siblings('.best-answer-badge').show();
+                // Supabaseへベストアンサー情報を送信する処理を追加
+            });
+
+            // 投票機能
+            $('.vote-button').on('click', function () {
+                const selectedOption = $('input[name="poll"]:checked').val();
+                // 選択された投票オプションをSupabaseに送信する処理を追加
+            });
+
+            // ログイン処理の例
+            $('#login').on('click', function () {
+                // Supabaseの認証APIを使ったログイン処理をここに追加
+            });
+        });
+
+// タグによる質問のフィルタリング
+async function getQuestionsByTag(tagName) {
+    let { data, error } = await supabase
+        .from('questions')
+        .select(`
+            id,
+            title,
+            detail,
+            tags!inner(name)
+        `)
+        .eq('tags.name', tagName);
+
+    if (error) {
+        console.error("Error fetching questions:", error);
+    } else {
+        console.log("Filtered questions by tag:", data);
+    }
+}
+
+
+
+    </script>
+
+</body>
+</html>
