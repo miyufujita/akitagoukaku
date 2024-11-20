@@ -1,0 +1,201 @@
+/* CSS ファイル: styles.css */
+
+/* 全体のレイアウト */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ヘッダー */
+header {
+    width: 100%;
+    background-color: #6200ea;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    margin-left: 1rem;
+}
+
+header input[type="text"] {
+    padding: 0.5rem;
+    border-radius: 20px;
+    border: none;
+    width: 50%;
+}
+
+header button {
+    background-color: #03dac6;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-right: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* メインコンテンツ */
+main {
+    display: flex;
+    width: 90%;
+    margin-top: 2rem;
+}
+
+/* サイドバー */
+aside {
+    width: 20%;
+    margin-right: 2rem;
+}
+
+aside h3 {
+    margin-bottom: 0.5rem;
+    color: #6200ea;
+}
+
+aside ul {
+    list-style-type: none;
+}
+
+aside li {
+    background-color: #ffffff;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+/* 質問リスト */
+.question-list {
+    width: 70%;
+}
+
+.filters label {
+    margin-right: 1rem;
+    font-size: 1rem;
+    color: #333;
+}
+
+.question {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.question h3 {
+    font-size: 1.4rem;
+    color: #6200ea;
+}
+
+.question p {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+.tags {
+    margin-top: 0.5rem;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #e0e0e0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #555;
+    margin-right: 0.5rem;
+}
+
+/* ボタンのデザイン */
+button {
+    background-color: #03dac6;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* 回答セクション */
+.answer {
+    background-color: #fafafa;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-left: 4px solid #03dac6;
+    border-radius: 8px;
+}
+
+.rating {
+    margin-top: 0.5rem;
+}
+
+.rating button {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* ベストアンサーのバッジ */
+.best-answer-badge {
+    background-color: #6200ea;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+/* 投票アンケート */
+.poll {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+}
+
+.poll h3 {
+    font-size: 1.2rem;
+    color: #6200ea;
+}
+
+/* フッター */
+footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
