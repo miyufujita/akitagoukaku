@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&Aサイト</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .gradient-header {
+            background: linear-gradient(135deg, #2c5282, #4299e1);
+        }
+        .search-input {
+            border: none;
+            outline: none;
+            border-radius: 50px 0 0 50px;
+            padding: 0.75rem 1.5rem;
+            flex-grow: 1;
+        }
+        .search-button {
+            border: none;
+            border-radius: 0 50px 50px 0;
+            background-color: #4299e1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .search-button:hover {
+            background-color: #2c5282;
+        }
+        .question-card {
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="gradient-header py-6 shadow-md" data-aos="fade-down">
+        <h1 class="text-white text-center text-3xl font-bold">秋医！知恵袋</h1>
+    </header>
+
+    <!-- Search Section -->
+    <section class="container mx-auto mt-8 px-6">
+        <div class="flex items-center shadow-md overflow-hidden rounded-full">
+            <input type="text" class="search-input" placeholder="質問を検索...">
+            <button class="search-button">検索</button>
+        </div>
+    </section>
+
+    <!-- Questions Section -->
+    <section class="container mx-auto mt-10 px-6">
+        <h2 class="text-2xl font-bold mb-6">質問一覧</h2>
+        
+        <!-- Example Question Card -->
+        <div class="question-card p-6 mb-6" data-aos="fade-up">
+            <h3 class="text-xl font-semibold">サンプル質問タイトル</h3>
+            <p class="text-gray-600 mt-2">この質問の概要やプレビューがここに表示されます。</p>
+            <button class="mt-4 text-blue-500 hover:text-blue-700 font-medium">詳細を見る</button>
+        </div>
+        
+        <div class="question-card p-6 mb-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="text-xl font-semibold">質問タイトル 2</h3>
+            <p class="text-gray-600 mt-2">質問の内容を少しだけ表示し、クリックしたくなるように誘導します。</p>
+            <button class="mt-4 text-blue-500 hover:text-blue-700 font-medium">詳細を見る</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-4 text-center shadow-md mt-10">
+        <p class="text-gray-600 text-sm">© 2024 秋医！知恵袋. All rights reserved.</p>
+    </footer>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&Aサイト</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Supabase & jQuery -->
+    <script src="https://unpkg.com/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        .shadow-custom {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, rgba(30, 58, 138, 0.8), rgba(37, 99, 235, 0.8));
+        }
+        #question-list li {
+            margin-bottom: 1rem;
+        }
+        #question-list li a {
+            color: #1d4ed8; /* 青色 */
+            font-weight: 500;
+        }
+        #question-list li span {
+            color: #6b7280; /* グレー */
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body class="relative bg-gray-50 text-gray-800">
+
+<header class="gradient-bg py-6 text-white text-center">
+    <h1 class="text-3xl font-bold">秋医！知恵袋</h1>
+    <p class="mt-2">秋田大学の全てがここに</p>
+</header>
+
+<!-- メインコンテンツ -->
+<main class="p-6 relative z-10">
+    <div class="floating-title shadow-custom bg-white rounded-md p-6 mx-auto max-w-xl">
+        <h2 class="text-2xl font-bold mb-4 text-center">質問一覧</h2>
+        <ul id="question-list" class="list-disc pl-5"></ul> <!-- 質問リスト -->
+        <p id="no-questions" class="text-gray-500 text-center hidden">質問がありません。</p>
+    </div>
+</main>
+
+<!-- フッター -->
+<footer class="bg-white shadow-custom p-5 text-center mt-6">
+    <p class="text-sm text-gray-600">© 2024 秋医！知恵袋. All rights reserved.</p>
+</footer>
+
+<script>
+    AOS.init();
+
+    const supabaseUrl = 'https://vsqqkpymevezyxfyxris.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzcXFrcHltZXZlenl4Znl4cmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcxNzYwNjQsImV4cCI6MjA0Mjc1MjA2NH0.BXu8Na4VLvrcqqBebA8F8e8uogjyi2E_SLDsza1C884';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    $(document).ready(function () {
+        fetchQuestions();
+
+        async function fetchQuestions() {
+            const questionList = $('#question-list');
+            const noQuestions = $('#no-questions');
+
+            try {
+                const { data: questions, error } = await supabaseClient
+                    .from('questions')
+                    .select('*'); // 必要なカラムを指定
+                if (error) throw error;
+
+                questionList.empty(); // リストをクリア
+
+                if (questions.length === 0) {
+                    noQuestions.removeClass('hidden'); // "質問がありません"を表示
+                } else {
+                    noQuestions.addClass('hidden'); // 隠す
+                    questions.forEach(question => {
+                        questionList.append(`
+                            <li>
+                                <a href="#" class="hover:underline" data-id="${question.id}">${question.title}</a>
+                                <span>👍 ${question.likes || 0}</span>
+                            </li>
+                        `);
+                    });
+                }
+            } catch (error) {
+                console.error('質問の取得エラー:', error);
+                noQuestions.text('エラーが発生しました。').removeClass('hidden');
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

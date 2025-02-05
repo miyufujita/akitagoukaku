@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&Aサイト</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        .shadow-custom {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #f7fafc;
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, rgba(30, 58, 138, 0.8), rgba(37, 99, 235, 0.8));
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        .floating-title {
+            position: relative;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 600px;
+            margin: 4rem auto;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .background-image {
+            background: url('秋田大学写真.jpg') no-repeat center center/cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: brightness(0.6);
+        }
+    </style>
+</head>
+<body class="relative bg-gray-50 text-gray-800">
+
+     <header class="gradient-header py-6 " data-aos="fade-down">
+
+        <h1 class="text-white text-center text-3xl font-bold">秋医！知恵袋</h1>
+         
+        
+        <p class="text-white text-center ">　</p>
+        <p class="text-white text-center ">秋田大学の全てがここに</p>
+    
+        
+        <div class="flex items-center space-x-4">
+            
+        </div>
+
+
+
+       
+
+    </header>
+
+
+
+
+    <!-- 背景画像 -->
+    <div class="background-image gradient-bg"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="p-6 relative z-10">
+
+                <div>
+
+                     <button id="explanation-button" class="floating-title flex flex-col items-center space-y-4" data-aos="fade-up" data-aos-delay="200" >
+                    <h2 class="text-2xl font-bold">本サイトについて</h2>
+                    <p class="text-gray-600 mt-4">初めにお読みください。</p>
+
+                    </button>
+
+
+                <button id="gakunenn-select" class="floating-title flex flex-col items-center space-y-4" data-aos="fade-up" data-aos-delay="200">
+                    <h2 class="text-2xl font-bold">学年から選ぶ</h2>
+                   </button>
+                
+        </div>
+        <!-- 検索バー -->
+        <!-- <div class="floating-title" data-aos="fade-up">
+            <div class="flex flex-col items-center space-y-4">
+                <input type="text" id="search-input" placeholder="質問を検索する(例；学年、科目)" class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full max-w-md">
+                <button id="search-button" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-all">検索</button>
+            </div>
+        </div>
+ -->
+
+        <div>
+                <button id="allQuestionsBtn" class="floating-title flex flex-col items-center space-y-4" data-aos="fade-up" data-aos-delay="200">
+                    <h2 class="text-2xl font-bold">内容一覧を見る</h2>
+                   </button>
+                
+        </div>
+        <div>
+                <!-- 質問タイトル -->
+
+               
+               </div>
+                
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white shadow-custom p-5 text-center mt-6 relative z-10" data-aos="fade-up" data-aos-delay="300">
+        <p class="text-sm text-gray-600">© 2024 秋医！知恵袋. All rights reserved.</p>
+    </footer>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init();
+
+         // ボタンにページ遷移のイベントを追加　一覧
+        document.getElementById("allQuestionsBtn").addEventListener("click", function() {
+            window.location.href = "untitled-all-question3.html"; // 遷移先ページを指定
+        });
+
+         // ボタンにページ遷移のイベントを追加　検索
+        document.getElementById("gakunenn-select").addEventListener("click", function() {
+            window.location.href = "search.html"; // 遷移先ページを指定
+        });
+
+         // ボタンにページ遷移のイベントを追加 説明
+        document.getElementById("explanation-button").addEventListener("click", function() {
+            window.location.href = "explanation.html"; // 遷移先ページを指定
+        });
+
+
+const supabaseUrl = 'https://vsqqkpymevezyxfyxris.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzcXFrcHltZXZlenl4Znl4cmlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcxNzYwNjQsImV4cCI6MjA0Mjc1MjA2NH0.BXu8Na4VLvrcqqBebA8F8e8uogjyi2E_SLDsza1C884';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        $(document).ready(function () {
+              // 質問リストを取得して表示
+            fetchQuestions();
+
+            // 質問リストの取得と表示
+            async function fetchQuestions(query = '') {
+                let { data: questions, error } = await supabaseClient
+                    .from('questions')
+                    .select('*')
+                    .like('title', `%${query}%`);
+
+                if (error) {
+                    console.error("質問の取得エラー:", error);
+                    return;
+                }
+                $('#question-list').empty();
+                questions.forEach(question => {
+                    $('#question-list').append(`
+                        <li>
+                            <a href="#" class="question-title" data-id="${question.id}">${question.title}</a>
+                            <span>👍 ${question.likes || 0}</span>
+                        </li>
+                    `);
+                });
+            }
+
+            // 検索ボタンの処理
+            $('#search-button').on('click', function() {
+                const query = $('#search-input').val();
+                fetchQuestions(query);
+            });
+
+        })
+
+        
+
+          
+    </script>
+
+
+
+
+
+
+</body>
+</html>
