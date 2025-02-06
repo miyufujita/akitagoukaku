@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目次付きページ</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        /* サイドバーのスタイル */
+        .sidebar {
+            width: 200px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-right: 1px solid #555;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        .sidebar.hidden {
+            transform: translateX(-220px);
+        }
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #f4f4f4;
+        }
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #ddd;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .sidebar a:hover {
+            background-color: #555;
+            color: white;
+        }
+
+        /* コンテンツ部分のスタイル */
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            flex-grow: 1;
+            transition: margin-left 0.3s ease;
+        }
+        .content.full-width {
+            margin-left: 0;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+        section h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        /* トグルボタンのスタイル */
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .toggle-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- トグルボタン -->
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- サイドバー -->
+    <div class="sidebar" id="sidebar">
+        <h2>目次</h2>
+        <nav id="sidebar-links">
+            <a href="#section1">始めに</a>
+            <a href="#section2">解剖</a>
+            <a href="#section3">組織</a>
+            <a href="#section4">生理</a>
+            <a href="#section5">その他</a>
+        </nav>
+    </div>
+
+    <!-- コンテンツ -->
+    <div class="content" id="content">
+        <section id="section1">
+            <h2>始めに</h2>
+            <p>k</p>
+        </section>
+        <section id="section2">
+            <h2>解剖</h2>
+            <h3>概要</h3>
+
+            <p>教授、一連の流れ、必要なもの、知っておいた方がいいこと、あるあるなど</p>
+            <h3>解剖実習の乗り越え方</h3>
+            <p>解剖実習、めっちゃ辛いと思います。わかります。負けないで
+            </p>
+            <h3>解剖期間中の勉強方法</h3>
+            <h3>解剖実習で辛い時の対処法</h3>
+            <h3>統一の解剖の勉強方法</h3>
+        </section>
+        <section id="section3">
+            <h2>組織</h2>
+
+            <p>ここはセクション3の内容です。</p>
+        </section>
+        <section id="section4">
+            <h2>生理</h2>
+            <p>ここはセクション4の内容です。</p>
+        </section>
+        <section id="section5">
+            <h2>その他</h2>
+            <p>ここはセクション5の内容です。</p>
+        </section>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            sidebar.classList.toggle('hidden');
+            content.classList.toggle('full-width');
+        }
+
+        // 小見出しをサイドバーに追加
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const sidebarLinks = document.getElementById('sidebar-links');
+
+            sections.forEach(section => {
+                const subHeadings = section.querySelectorAll('h3');
+                subHeadings.forEach(h3 => {
+                    const link = document.createElement('a');
+                    link.href = `#${h3.parentElement.id}`;
+                    link.textContent = `- ${h3.textContent}`;
+                    link.style.marginLeft = '10px';
+                    sidebarLinks.appendChild(link);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
